@@ -13,6 +13,8 @@ jobs:
       pull-requests: write
     steps:
       - name: Update PR title
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           TARGET_BRANCH=$(gh pr view $PR_NUMBER --json baseRefName -q .baseRefName)
