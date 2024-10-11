@@ -10,16 +10,16 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
       - name: Extract secrets from plugins.yml and set environment variables
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install pyyaml
-          python set_env.py
+          TEMP_ENV_VARS=$(mktemp)
+          grep -oP '\$\w+' "plugins.yml" | sort -u | while read -r var; do
+              var_name="${var:1}"
+              echo "${var_name}=${{ secrets.${var_name} }}" >> "$TEMP_ENV_VARS"
+          done
+
+          cat "$TEMP_ENV_VARS" >> $GITHUB_ENV
+          rm "$TEMP_ENV_VARS"
 
       - name: Verify environment variables
         run: |
