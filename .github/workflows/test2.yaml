@@ -15,7 +15,8 @@ jobs:
           TEMP_ENV_VARS=$(mktemp)
           grep -oP '\$\w+' "plugins.yml" | sort -u | while read -r var; do
               var_name="${var:1}"
-              echo "${var_name}=${${var_name}}" >> "$TEMP_ENV_VARS"
+              secret_value=$(eval echo \${{ secrets.${var_name} }})
+              echo "${var_name}=${secret_value}" >> "$TEMP_ENV_VARS"
           done
 
           cat "$TEMP_ENV_VARS" >> $GITHUB_ENV
