@@ -12,15 +12,10 @@ jobs:
 
       - name: Extract secrets from plugins.yml and set environment variables
         run: |
-          TEMP_ENV_VARS=$(mktemp)
           grep -oP '\$\w+' "plugins.yml" | sort -u | while read -r var; do
               var_name="${var:1}"
-              secret_value=$(eval echo \${{ secrets.${var_name} }})
-              echo "${var_name}=${secret_value}" >> "$TEMP_ENV_VARS"
+              echo "${var_name}='${{ secrets.${var_name} }}'" >> $GITHUB_ENV
           done
-
-          cat "$TEMP_ENV_VARS" >> $GITHUB_ENV
-          rm "$TEMP_ENV_VARS"
 
       - name: Verify environment variables
         run: |
