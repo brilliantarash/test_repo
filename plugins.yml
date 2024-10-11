@@ -62,6 +62,7 @@ plugins:
       access_token: $BRC_MASTODON_ACCESS_TOKEN
       max_content_length: 500
 
+
   - name: bluesky-brc
     class: bluesky.bluesky_client
     enabled: true
