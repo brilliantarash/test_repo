@@ -22,3 +22,4 @@ jobs:
         with:
           file_pattern: '*.md'
           disable_globbing: true
+          branch: main
