@@ -9,8 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "main"
+          token: ${{ secrets.GITHUB_TOKEN }}
       - run: mkdir markdown
       - run: echo "Hello World" > markdown/hello.md
       - uses: stefanzweifel/git-auto-commit-action@v5
