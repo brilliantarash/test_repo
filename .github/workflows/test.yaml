@@ -1,9 +1,8 @@
 name: Update
 
 on:
-  pull_request:
-    paths-ignore:
-      - ".github/**"
+  pull_request_target:
+
 env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_24.1
