@@ -21,4 +21,5 @@ jobs:
 
       - name: Run Python Script
         run: |
+          echo ${{ github.event_name }}
           python test.py
