@@ -1,25 +1,34 @@
-name: Update
+name: The EARs Reviewing bot on merged or closed PRs
 
 on:
   pull_request_target:
 
-env:
-  GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_24.1
-  MAX_CHUNKS: 4
-  CMEMS_PASSWORD: ${{ secrets.CMEMS_PASSWORD }}
-  CMEMS_USERNAME: ${{ secrets.CMEMS_USERNAME }}
-  MAX_FILE_SIZE: 1M
-
 jobs:
-  example_job:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: 917566
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: "ERGA-consortium"
+          repositories: "EARs"
 
-      - name: Run Python Script
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: "main"
+          token: ${{ steps.generate-token.outputs.token }}
+          persist-credentials: false
+
+      - name: Create a test csv file
         run: |
-          echo ${{ github.event_name }}
-          python test.py
+          echo "test" > test.csv
+
+      - name: Upload csv file
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: "*.csv"
+          branch: main
