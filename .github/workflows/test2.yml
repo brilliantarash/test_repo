@@ -15,11 +15,7 @@ on:
         type: number
 
 jobs:
-  check-closed:
-    if: github.event_name == 'pull_request_target' && github.event.action == 'closed' && github.event.pull_request.merged == false
-    runs-on: ubuntu-latest
   test2:
-    needs: check-closed
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
