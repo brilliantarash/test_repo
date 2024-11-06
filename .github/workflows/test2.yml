@@ -1,22 +1,37 @@
-name: Echo Input
+name: Test2
 
 on:
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, closed]
+    paths:
+      - "posts/**"
+
   workflow_dispatch:
     inputs:
       pr_number:
-        description: "The number of the pull request to handle"
+        description: "The number of the pull request to create preview for"
+        required: true
         type: number
 
 jobs:
-  echo-input:
+  test2:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo the input
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run scriot
         env:
-          pr_number: ${{ github.event.inputs.pr_number }}
-        run: |
-          if [[ "$pr_number" =~ ^[0-9]+$ ]]; then
-            echo "The input is a number: $pr_number"
-          else
-            echo "The input is not a number: $pr_number"
-          fi
+          PR_NUMBER: ${{ github.event.inputs.pr_number || github.event.number }}
+          ACTION_TYPE: ${{ github.event.action }}
+          MERGED: ${{ github.event.pull_request.merged }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: python -u test2.py
