@@ -4,8 +4,8 @@ closed = os.getenv("ACTION_TYPE") == "closed"
 merged = os.getenv("MERGED") == "true"
 try:
     pr = int(os.getenv("PR_NUMBER"))
-except:
-    raise Exception("PR_NUMBER is not a number")
+except Exception as e:
+    raise Exception(f"PR_NUMBER is not a number or not set: {e}")
 print(f"Closed: {closed}")
 print(f"Merged: {merged}")
 print(f"PR: {pr}")
