@@ -23,23 +23,19 @@ processed_files_path = "processed_files.json"
 processed_files_branch = "processed_files"
 
 
-try:
-    branch = repo.get_branch(processed_files_branch)
-except:
-    print(repo.full_name,repo.get_branches(),repo.get_branch("main").commit.sha,g.get_rate_limit())
-    repo.create_git_ref(
-        ref=f"refs/heads/{processed_files_branch}",
-        sha=repo.get_branch("main").commit.sha,
-    )
-    message = f"Initialize {processed_files_branch} with {processed_files_path}"
-    repo.create_file(
-        path=processed_files_path,
-        message=message,
-        content="{}",
-        branch=processed_files_branch,
-    )
-    print(message)
-    branch = repo.get_branch(processed_files_branch)
+repo.create_git_ref(
+    ref=f"refs/heads/{processed_files_branch}",
+    sha=repo.get_branch("main").commit.sha,
+)
+message = f"Initialize {processed_files_branch} with {processed_files_path}"
+repo.create_file(
+    path=processed_files_path,
+    message=message,
+    content="{}",
+    branch=processed_files_branch,
+)
+print(message)
+branch = repo.get_branch(processed_files_branch)
 
 file_content = repo.get_contents(processed_files_path, ref=branch.commit.sha)
 processed_files = file_content.decoded_content.decode()
