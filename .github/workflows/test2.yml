@@ -14,4 +14,9 @@ jobs:
       - name: Echo the input
         env:
           pr_number: ${{ github.event.inputs.pr_number }}
-        run: echo "The PR number is $pr_number"
+        run: |
+          if [[ "$pr_number" =~ ^[0-9]+$ ]]; then
+            echo "The input is a number: $pr_number"
+          else
+            echo "The input is not a number: $pr_number"
+          fi
