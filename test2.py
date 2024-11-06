@@ -6,7 +6,7 @@ import github
 
 with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
     event_data = json.load(f)
-print(f"event_data:\n {event_data}")
+print(json.dumps(event_data, indent=4))
 pr_number = event_data.get("number") or event_data.get("inputs", {}).get("pr_number")
 closed = event_data.get("action") == "closed"
 pr_merged = event_data.get("pull_request", {}).get("merged")
