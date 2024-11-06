@@ -76,7 +76,7 @@ def get_files():
     for file in pr.get_files():
         file_path = file.filename
         if file_path.endswith(".md"):
-            pr_content = repo.get_contents(
+            pr_content = pr.head.repo.get_contents(
                 file_path, ref=pr.head.ref
             ).decoded_content.decode()
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
