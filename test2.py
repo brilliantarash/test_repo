@@ -2,6 +2,7 @@ import json
 import os
 
 import github
+import requests
 
 
 with open(os.getenv("GITHUB_EVENT_PATH"), "r") as f:
@@ -14,19 +15,26 @@ print(f"pr_number: {pr_number}")
 print(f"closed: {closed}")
 print(f"pr_merged: {pr_merged}")
 
-
-g = github.Github(os.getenv("GITHUB_TOKEN"))
-repo = g.get_repo(os.getenv("GITHUB_REPOSITORY"))
+token = os.getenv("GITHUB_TOKEN")
+g = github.Github(token)
+repo_name = os.getenv("GITHUB_REPOSITORY")
+repo = g.get_repo(repo_name)
 pr = repo.get_pull(pr_number)
 
 processed_files_path = "processed_files.json"
 processed_files_branch = "processed_files"
 
-ref = f"refs/heads/{processed_files_branch}"
-main_sha = repo.get_branch("main").commit.sha
-print(f"main_sha: {main_sha}")
-print(f"ref: {ref}")
-repo.create_git_ref(ref=ref, sha=main_sha)
+url = f"https://api.github.com/repos/{repo_name}/git/refs"
+headers = {
+    "Authorization": f"token {token}",
+    "Accept": "application/vnd.github.v3+json",
+}
+data = {
+    "ref": f"refs/heads/{processed_files_branch}",
+    "sha": repo.get_branch("main").commit.sha,
+}
+response = requests.post(url, headers=headers, json=data)
+response.raise_for_status()
 message = f"Initialize {processed_files_branch} with {processed_files_path}"
 repo.create_file(
     path=processed_files_path,
