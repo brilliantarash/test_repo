@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 
 import github
 
@@ -50,7 +49,7 @@ print(f"processed_files:\n {processed_files}")
 if os.path.exists(processed_files_path):
     with open(processed_files_path, "r") as file:
         file_data_json = json.load(file)
-    file_data_json = {'test': 'test'}
+    file_data_json = {"test": "test"}
     with open(processed_files_path, "w") as file:
         json.dump(file_data_json, file)
 
