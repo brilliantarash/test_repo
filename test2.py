@@ -26,6 +26,7 @@ processed_files_branch = "processed_files"
 try:
     branch = repo.get_branch(processed_files_branch)
 except:
+    print(repo.full_name,repo.get_branches(),repo.get_branch("main").commit.sha,g.get_rate_limit())
     repo.create_git_ref(
         ref=f"refs/heads/{processed_files_branch}",
         sha=repo.get_branch("main").commit.sha,
