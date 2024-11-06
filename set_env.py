@@ -1,5 +1,6 @@
-import yaml
 import re
+
+import yaml
 
 with open("plugins.yml", 'r') as file:
     plugins = yaml.safe_load(file)

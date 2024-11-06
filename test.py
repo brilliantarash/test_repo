@@ -1,4 +1,5 @@
 import os
+
 from github import Github
 
 CSV_FILE_PATH = "test.csv"
