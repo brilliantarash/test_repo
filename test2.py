@@ -86,4 +86,8 @@ def get_files():
 
     return files_to_process
 
-print("files_to_process:",get_files())
+files_to_process = get_files()
+print("files_to_process:",files_to_process)
+for file2 in files_to_process:
+    with open(file2, "r") as f:
+        print(f.read())
