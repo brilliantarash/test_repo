@@ -22,11 +22,11 @@ pr = repo.get_pull(pr_number)
 processed_files_path = "processed_files.json"
 processed_files_branch = "processed_files"
 
-
-repo.create_git_ref(
-    ref=f"refs/heads/{processed_files_branch}",
-    sha=repo.get_branch("main").commit.sha,
-)
+ref = f"refs/heads/{processed_files_branch}"
+main_sha = repo.get_branch("main").commit.sha
+print(f"main_sha: {main_sha}")
+print(f"ref: {ref}")
+repo.create_git_ref(ref=ref, sha=main_sha)
 message = f"Initialize {processed_files_branch} with {processed_files_path}"
 repo.create_file(
     path=processed_files_path,
