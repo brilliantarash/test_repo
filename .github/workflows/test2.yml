@@ -33,5 +33,4 @@ jobs:
           PR_NUMBER: ${{ github.event.inputs.pr_number || github.event.number }}
           ACTION_TYPE: ${{ github.event.action }}
           MERGED: ${{ github.event.pull_request.merged }}
-          EVENT_NAME: ${{ github.event_name }}
         run: python -u test2.py

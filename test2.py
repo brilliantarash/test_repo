@@ -1,17 +1,15 @@
 import os
 
-action_type = os.getenv("ACTION_TYPE")
-event_name = os.getenv("EVENT_NAME")
-print(f"Action type: {action_type}")
-print(f"Event name: {event_name}")
-print(f"Merged: {os.getenv("MERGED")}")
-if action_type == "closed" and os.getenv("MERGED") == "true":
+closed = os.getenv("ACTION_TYPE") == "closed"
+merged = os.getenv("MERGED") == "true"
+pr = os.getenv("PR_NUMBER")
+print(f"Closed: {closed}")
+print(f"Merged: {merged}")
+print(f"PR: {pr}")
+
+if merged:
     print("Running in production mode")
-elif (
-    event_name == "pull_request_target"
-    and action_type in ["opened", "synchronize", "reopened"]
-) or event_name == "workflow_dispatch":
+elif not closed:
     print("Running in preview mode")
 else:
-    print("No action to take")
-print(f"PR: {os.getenv('PR_NUMBER')}")
+    print("closed but not merged")
