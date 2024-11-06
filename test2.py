@@ -70,4 +70,20 @@ repo.update_file(
     branch=processed_files_branch,
 )
 print(message)
-print(file_data)
+
+def get_files():
+    files_to_process = []
+    for file in pr.get_files():
+        file_path = file.filename
+        if file_path.endswith(".md"):
+            pr_content = repo.get_contents(
+                file_path, ref=pr.head.ref
+            ).decoded_content.decode()
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            with open(file_path, "w") as f:
+                f.write(pr_content)
+            files_to_process.append(file_path)
+
+    return files_to_process
+
+print("files_to_process:",get_files())
