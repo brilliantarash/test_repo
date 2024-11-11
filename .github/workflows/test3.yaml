@@ -1,0 +1,42 @@
+name: Compress images
+on:
+  pull_request:
+    paths:
+      - "**.jpg"
+      - "**.jpeg"
+      - "**.png"
+  push:
+    branches:
+      - master
+    paths:
+      - "**.jpg"
+      - "**.jpeg"
+      - "**.png"
+  workflow_dispatch:
+jobs:
+  build:
+    name: calibreapp/image-actions
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name != 'pull_request' ||
+       github.event.pull_request.head.repo.full_name == github.repository)
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@v2
+      - name: Compress Images
+        id: calibre
+        uses: calibreapp/image-actions@main
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          compressOnly: ${{ github.event_name != 'pull_request' }}
+          webpQuality: '90'
+      - name: Create Pull Request
+        if: |
+          github.event_name != 'pull_request' &&
+          steps.calibre.outputs.markdown != ''
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: Auto Compress Images
+          branch-suffix: timestamp
+          commit-message: Compress Images
+          body: ${{ steps.calibre.outputs.markdown }}
