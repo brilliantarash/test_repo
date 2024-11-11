@@ -17,12 +17,10 @@ jobs:
   build:
     name: calibreapp/image-actions
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - name: print the event
-        run: |
-          echo "Event: ${{ github.event_name }}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Pull Request: ${{ github.event.pull_request.head.repo.full_name }}"
       - name: Checkout Branch
         uses: actions/checkout@v4
       - name: Compress Images
@@ -36,7 +34,7 @@ jobs:
         if: |
           github.event_name != 'pull_request' &&
           steps.calibre.outputs.markdown != ''
-        uses: peter-evans/create-pull-request@v3
+        uses: peter-evans/create-pull-request@v7
         with:
           title: Auto Compress Images
           branch-suffix: timestamp
