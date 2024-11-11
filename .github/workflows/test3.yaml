@@ -7,7 +7,7 @@ on:
       - "**.png"
   push:
     branches:
-      - master
+      - main
     paths:
       - "**.jpg"
       - "**.jpeg"
